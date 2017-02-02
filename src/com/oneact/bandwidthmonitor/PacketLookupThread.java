@@ -4,7 +4,6 @@ import java.io.IOException;
 
 import jpcap.JpcapCaptor;
 import jpcap.NetworkInterface;
-import jpcap.NetworkInterfaceAddress;
 
 public class PacketLookupThread extends Thread
 {

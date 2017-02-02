@@ -3,14 +3,9 @@ package com.oneact.bandwidthmonitor;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
-import javax.swing.AbstractAction;
-import javax.swing.Action;
 import javax.swing.JButton;
 import java.awt.Color;
-import java.awt.Window.Type;
-import java.awt.Button;
 import java.awt.event.ActionListener;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -29,13 +24,11 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
-import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.data.RangeType;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 import javax.swing.JComboBox;
-import javax.swing.DefaultComboBoxModel;
 
 
 public class BandWidthMonitor  implements ActionListener{
@@ -50,7 +43,6 @@ public class BandWidthMonitor  implements ActionListener{
     private JLabel lblInterface;
     private JComboBox<String> comboBox;
 	private ArrayList<Integer> interfacesList;
-	private int deviceToOpen;
 
 	private JButton btnStart;
 	private JButton btnStop;
@@ -98,7 +90,6 @@ public class BandWidthMonitor  implements ActionListener{
 	{
 		initialize();
 		
-		deviceToOpen = 0;
 		nb = 0;
 		downloadedPacketNb = 0;
 		uploadedPacketNb = 0;
@@ -185,8 +176,6 @@ public class BandWidthMonitor  implements ActionListener{
 		frmBandwidthMonitor.getContentPane().add(lblPacketsNbUp);
         
         comboBox = new JComboBox<String>();
-//        interfacesCombo = new ArrayList<String>();
-//        comboBox.setModel(new DefaultComboBoxModel(interfacesCombo.toArray()));
         
         comboBox.setBackground(Color.WHITE);
         comboBox.setBounds(6, 46, 117, 27);

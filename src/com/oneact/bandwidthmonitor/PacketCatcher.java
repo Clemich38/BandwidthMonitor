@@ -3,12 +3,9 @@ package com.oneact.bandwidthmonitor;
 
 
 import java.util.Arrays;
-import java.util.Random;
-
 import jpcap.PacketReceiver;
 import jpcap.packet.DatalinkPacket;
 import jpcap.packet.EthernetPacket;
-import jpcap.packet.IPPacket;
 import jpcap.packet.Packet;
 
 public class PacketCatcher implements PacketReceiver
