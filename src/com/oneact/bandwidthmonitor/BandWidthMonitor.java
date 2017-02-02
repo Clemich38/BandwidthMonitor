@@ -384,6 +384,5 @@ public class BandWidthMonitor  implements ActionListener{
     		speedChart = createChart(speedDataset);
             chartPanel = new ChartPanel(speedChart);
 		}
-		
 	}
 }

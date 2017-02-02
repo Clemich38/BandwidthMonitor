@@ -19,13 +19,9 @@ public class PacketCatcher implements PacketReceiver
     public static int tmpNb = 0;
     public static byte[] macAddress = {0, 0, 0, 0, 0, 0};
     
-	//this method is called every time Jpcap captures a packet
+	//this callback method is called every time Jpcap captures a packet
 	public void receivePacket(Packet packet)
-	{
-	    //just print out a captured packet
-//	    downloadedDataSize += packet.len;
-//	    System.out.println("dowloadedSize: " + downloadedDataSize);
-	    
+	{   
 	    DatalinkPacket dp = packet.datalink;
 	    EthernetPacket ept=(EthernetPacket)dp;
 	    
@@ -51,10 +47,6 @@ public class PacketCatcher implements PacketReceiver
         tmpSize = downloadedDataSize;
         downloadedDataSize = 0;
         return tmpSize;
-        
-//        Random r = new Random();
-//        int Result = r.nextInt(300);
-//        return (float) Result;
     }
 
     public static float getUploadedDataSize()
@@ -62,10 +54,6 @@ public class PacketCatcher implements PacketReceiver
         tmpSize = uploadedDataSize;
         uploadedDataSize = 0;
         return tmpSize;
-        
-//        Random r = new Random();
-//        int Result = r.nextInt(100);
-//        return (float) Result;
     }
 
     public static int getDownloadedPacketNb()
