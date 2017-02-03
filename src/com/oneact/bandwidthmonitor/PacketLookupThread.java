@@ -13,13 +13,14 @@ public class PacketLookupThread extends Thread
     @Override
     public void run()
     {
-		//Obtain the list of network interfaces
-		NetworkInterface[] devices = JpcapCaptor.getDeviceList();
+		// Obtain the list of network interfaces
+		NetworkInterface[] interfaces = JpcapCaptor.getDeviceList();
 		int index = interfaceIndex;
-		System.out.println("Openning device: "+devices[index].name + "(" + devices[index].description+")");
+		System.out.println("Openning device: "+interfaces[index].name + "(" + interfaces[index].description+")");
 		
 		try {
-			captor = JpcapCaptor.openDevice(devices[index], 65535, false, 20);
+			// Connect to the choosen network interface
+			captor = JpcapCaptor.openDevice(interfaces[index], 65535, false, 20);
 		}
 		catch (IOException e) {
 			e.printStackTrace();
@@ -28,7 +29,7 @@ public class PacketLookupThread extends Thread
 
 		if(captor != null)
 		{
-			PacketCatcher.setMacAddress(devices[index].mac_address);
+			PacketCatcher.setMacAddress(interfaces[index].mac_address);
 			System.out.println("Session started");
 			captor.setPacketReadTimeout(1000);
 			captor.loopPacket(-1, new PacketCatcher());

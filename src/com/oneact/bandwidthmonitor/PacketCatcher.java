@@ -19,7 +19,7 @@ public class PacketCatcher implements PacketReceiver
     public static int tmpNb = 0;
     public static byte[] macAddress = {0, 0, 0, 0, 0, 0};
     
-	//this callback method is called every time Jpcap captures a packet
+	// This callback method is called every time Jpcap lib captures a packet
 	public void receivePacket(Packet packet)
 	{   
 	    DatalinkPacket dp = packet.datalink;
@@ -28,6 +28,7 @@ public class PacketCatcher implements PacketReceiver
 	    byte[] destAddress = ept.dst_mac;
 	    System.out.println("dest addr: " + destAddress);
 	    
+	    // Get the packet direction looking at the destination address
 	    if(Arrays.equals(destAddress, macAddress) == true)
 	    {
 	    	downloadedDataSize += packet.len;

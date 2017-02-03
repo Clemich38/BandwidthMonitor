@@ -107,11 +107,8 @@ public class BandWidthMonitor  implements ActionListener{
 		
 		speedDataset = createDatasets();
 		speedChart = createChart(speedDataset);
-
         chartPanel = new ChartPanel(speedChart);
-
         chartPanel.setPreferredSize(new java.awt.Dimension(500, 270));
-
         chartPanel.setBounds(130, 6, 500, 270);
         frmBandwidthMonitor.getContentPane().add(chartPanel);
         
@@ -195,31 +192,31 @@ public class BandWidthMonitor  implements ActionListener{
     private void discoverInterfaces()
     {
     	//Obtain the list of network interfaces
-		NetworkInterface[] devices = JpcapCaptor.getDeviceList();
+		NetworkInterface[] interfaces = JpcapCaptor.getDeviceList();
 		interfacesList = new ArrayList<Integer>();
 		
-		//for each network interface
-		for (int i = 0; i < devices.length; i++)
+		// For each network interface
+		for (int i = 0; i < interfaces.length; i++)
 		{
-			//print out its name and description
-			System.out.println(i+": "+devices[i].name + "(" + devices[i].description+")");
+			// Print out its name and description
+			System.out.println(i+": "+interfaces[i].name + "(" + interfaces[i].description+")");
 
-			//print out its datalink name and description
-			System.out.println(" datalink: "+devices[i].datalink_name + "(" + devices[i].datalink_description+")");
-			if(devices[i].datalink_description.equalsIgnoreCase("Ethernet"))
+			// Print out its datalink name and description
+			System.out.println(" datalink: "+interfaces[i].datalink_name + "(" + interfaces[i].datalink_description+")");
+			if(interfaces[i].datalink_description.equalsIgnoreCase("Ethernet"))
 			{
-				comboBox.addItem(devices[i].name);
+				comboBox.addItem(interfaces[i].name);
 				interfacesList.add(i);
 			}
 
-			//print out its MAC address
+			// Print out its MAC address
 			System.out.print(" MAC address:");
-			for (byte b : devices[i].mac_address)
+			for (byte b : interfaces[i].mac_address)
 				System.out.print(Integer.toHexString(b&0xff) + ":");
 			System.out.println();
 
-			//print out its IP address, subnet mask and broadcast address
-			for (NetworkInterfaceAddress a : devices[i].addresses)
+			// Print out its IP address, subnet mask and broadcast address
+			for (NetworkInterfaceAddress a : interfaces[i].addresses)
 				System.out.println(" address:"+a.address + " " + a.subnet + " "+ a.broadcast);
 		}	
     
