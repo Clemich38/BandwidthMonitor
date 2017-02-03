@@ -373,10 +373,10 @@ public class BandWidthMonitor  implements ActionListener{
 				dataStr = String.format(" (%dkb)", uploadedDataSize);
 			lblPacketsNbUp.setText("Uploaded Packets: " + uploadedPacketNb + dataStr);
 			
-            downSpeedFifo.add(downSpeed);
+            downSpeedFifo.add(downSpeed >= 1 ? downSpeed : 1);
             if (downSpeedFifo.size() > 40)
             	downSpeedFifo.poll();
-            upSpeedFifo.add(upSpeed);
+            upSpeedFifo.add(upSpeed >= 1 ? upSpeed : 1);
             if (upSpeedFifo.size() > 40)
             	upSpeedFifo.poll();
 
