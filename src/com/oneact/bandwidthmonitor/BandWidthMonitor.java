@@ -1,7 +1,6 @@
 package com.oneact.bandwidthmonitor;
 
 import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JButton;
 import java.awt.Color;
@@ -252,7 +251,7 @@ public class BandWidthMonitor  implements ActionListener{
         final JFreeChart chart = ChartFactory.createXYAreaChart(
                 "",
                 "Seconds",
-                "Speed",
+                "Speed (kb/s)",
                 dataset,
                 PlotOrientation.VERTICAL,
                 false,
@@ -272,6 +271,8 @@ public class BandWidthMonitor  implements ActionListener{
         final NumberAxis yAxis = (NumberAxis) plot.getRangeAxis();
         yAxis.setAutoRangeMinimumSize(500);
         yAxis.setRangeType(RangeType.POSITIVE);
+        yAxis.setLabelPaint(Color.gray);
+        yAxis.setTickLabelPaint(Color.gray);
         final NumberAxis xAxis = (NumberAxis) plot.getDomainAxis();
         xAxis.setRange(0, 40);
         
