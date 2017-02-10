@@ -5,6 +5,8 @@ import javax.swing.JFrame;
 import javax.swing.JButton;
 import java.awt.Color;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -15,6 +17,7 @@ import jpcap.JpcapCaptor;
 import jpcap.NetworkInterface;
 import jpcap.NetworkInterfaceAddress;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.Timer;
 
 import org.jfree.chart.ChartFactory;
@@ -28,6 +31,7 @@ import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 
 
 public class BandWidthMonitor  implements ActionListener{
@@ -46,6 +50,7 @@ public class BandWidthMonitor  implements ActionListener{
 	private JButton btnStart;
 	private JButton btnStop;
 	private JButton btnReset;
+	private JButton showFileDialogButton;
 	
 	private Timer refreshTimer;
 	private int nb;
@@ -65,6 +70,7 @@ public class BandWidthMonitor  implements ActionListener{
     Queue<Integer> upSpeedFifo = new LinkedList<Integer>();
 
     PacketLookupThread thread = null;
+    DataExporter dataExporter = null;
 	
 	/**
 	 * Launch the application.
@@ -88,6 +94,8 @@ public class BandWidthMonitor  implements ActionListener{
 	public BandWidthMonitor()
 	{
 		initialize();
+		
+		dataExporter = new DataExporter();
 		
 		nb = 0;
 		downloadedPacketNb = 0;
@@ -181,6 +189,12 @@ public class BandWidthMonitor  implements ActionListener{
         lblInterface.setForeground(Color.LIGHT_GRAY);
         lblInterface.setBounds(16, 30, 61, 16);
         frmBandwidthMonitor.getContentPane().add(lblInterface);
+        
+        showFileDialogButton = new JButton("Export...");
+		showFileDialogButton.addActionListener(this);
+		showFileDialogButton.setEnabled(false);
+		showFileDialogButton.setBounds(6, 343, 117, 29);
+		frmBandwidthMonitor.getContentPane().add(showFileDialogButton);
         
 		// Refresh Timer
         refreshTimer = new Timer(1000, this);
@@ -286,6 +300,9 @@ public class BandWidthMonitor  implements ActionListener{
 		
 		if(source == btnStart)
 		{
+			// Open log file
+			dataExporter.openFile();
+			
 			lblSessionstatus.setText("Recording time " + nb + "s");
 			thread = new PacketLookupThread();
 			thread.setIndex(interfacesList.get(comboBox.getSelectedIndex()));
@@ -296,9 +313,13 @@ public class BandWidthMonitor  implements ActionListener{
 			btnReset.setEnabled(false);
 			comboBox.setEnabled(false);
 			btnStop.setEnabled(true);
+			showFileDialogButton.setEnabled(false);
 		}
 		else if(source == btnStop)
 		{
+			// Open log file
+			dataExporter.closeFile();
+			
 			lblSessionstatus.setText("Session stopped");
 			thread.stopsession();
 			refreshTimer.stop();
@@ -307,6 +328,7 @@ public class BandWidthMonitor  implements ActionListener{
 			btnReset.setEnabled(true);
 			comboBox.setEnabled(true);
 			btnStop.setEnabled(false);
+			showFileDialogButton.setEnabled(true);
 		}
 		else if(source == btnReset)
 		{
@@ -378,9 +400,35 @@ public class BandWidthMonitor  implements ActionListener{
             if (upSpeedFifo.size() > 40)
             	upSpeedFifo.poll();
 
+			// Write in log file
+			dataExporter.writeLine(f_downSpeed, f_upSpeed, nb);
+
     		speedDataset = createDatasets();
     		speedChart = createChart(speedDataset);
             chartPanel = new ChartPanel(speedChart);
+		}
+		else if(source == showFileDialogButton)
+		{
+			final JFileChooser fileDialog = new JFileChooser();
+			fileDialog.setSelectedFile(new File("log.csv"));
+			fileDialog.setApproveButtonText("Save");
+			
+			int returnVal = fileDialog.showDialog(frmBandwidthMonitor, "Save");
+			if (returnVal == JFileChooser.APPROVE_OPTION) {
+				java.io.File file = fileDialog.getSelectedFile();
+				try
+				{
+					dataExporter.copyFile(file.getPath());		
+					JOptionPane.showMessageDialog(frmBandwidthMonitor, "Log exported!", "BandWidth Monitor", JOptionPane.INFORMATION_MESSAGE);
+				} 
+				catch (IOException e1) 
+				{
+					// Display an error popup
+					JOptionPane.showMessageDialog(frmBandwidthMonitor, "Unable to create the log file!", "BandWidth Monitor",
+							JOptionPane.WARNING_MESSAGE);
+					e1.printStackTrace();
+				}
+			}
 		}
 	}
 }
